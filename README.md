@@ -12,19 +12,13 @@ Plain Jekyll, the version built into GitHub Pages. No plugins, no external scrip
 
 Edit the files in `docs/user/` or `docs/legal/`, then run `npm run site:sync`. `npm test` fails if the copies in `site/` are out of date.
 
-Legal pages show the banner "Draft - not yet reviewed by counsel". To remove it, set `draft: false` for the `legal` section in `scripts/site-sync.mjs` and re-run the sync. Keep every `[TO CONFIRM]` marker until resolved.
+Legal pages can show a "Draft - not yet reviewed by counsel" banner: set `draft: true` for the `legal` section in `scripts/site-sync.mjs` and re-run the sync. It is off since the placeholders were filled (2026-10-11).
 
-## Publishing (Kevin only, not done yet)
+## Publishing
 
-The workflow `.github/workflows/pages.yml` builds `site/` and deploys it with GitHub Actions.
+The site is served by GitHub Pages from the **public** repository `Mrvivino/repeatwise-docs` (branch `main`, root folder, built-in Jekyll), because this app repository is private. Address: https://mrvivino.github.io/repeatwise-docs/ (`url` and `baseurl` in `_config.yml`). This is transitional, until a publisher site groups all apps; when the address changes, update `_config.yml`, `src/shared/support.ts`, `docs/marketplace/listing.md` and the Marketplace listing.
 
-1. Merge this work to `main`.
-2. Repository Settings > Pages > Build and deployment > Source: **GitHub Actions**.
-3. Run the "Docs site" workflow from the Actions tab (it never runs on push). The URL is shown in the workflow run, normally `https://mrvivino.github.io/repeatwise/`.
-4. `baseurl` is already `/repeatwise`; set `url` in `site/_config.yml` if the address differs, then run the workflow again. Replace `<docs site URL>` in `docs/marketplace/submission-checklist.md`.
-5. Fill the `[TO CONFIRM]` items (support email, Marketplace URL) and have counsel review the legal pages before announcing.
-
-A repository on a free plan must be public for Pages. A custom domain can be set in the same Pages settings.
+After `npm run site:sync`, run `scripts/site-publish.sh`. It copies `site/` into the public repository and pushes; Pages rebuilds in about a minute. Only `site/` is ever copied.
 
 ## Local preview (optional)
 

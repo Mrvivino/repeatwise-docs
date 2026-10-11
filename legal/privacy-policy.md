@@ -65,7 +65,7 @@ We do not sell data or use it for advertising, and we do not use it to train AI 
 
 ## 6. Third-party access and sharing
 
-We share data with no one. Atlassian hosts it as described above. Where we need to answer a support request, we may ask you for information; we never need direct access to your Jira site. We cannot browse your Forge storage. RepeatWise writes technical log lines (schedule ids, planned times, issue keys, statuses, error types and Jira error messages with account ids removed), never template text. For a production installation we can only read these logs if your site administrator allows log sharing with the app developer in Jira's app settings.
+We share data with no one. Atlassian hosts it as described above. Where we need to answer a support request, we may ask you for information; we never need direct access to your Jira site. We cannot browse your Forge storage. RepeatWise writes technical log lines: schedule ids, planned times, issue keys, statuses, error types and Jira error messages with account ids removed. It does not log templates, but a Jira error message can quote a value that was sent to Jira, such as a field value. For a production installation we can only read these logs if your site administrator allows log sharing with the app developer in Jira's app settings.
 
 ## 7. International transfers
 
@@ -75,7 +75,7 @@ We do not transfer customer data ourselves. Location of storage and any transfer
 
 - Schedules, templates and settings have no age-based purge while the app is installed. Deleting a schedule removes its schedule, template, candidate log, occurrence work and dispatch rows. Its occurrence history and schedule audit remain for the retention purge.
 - **24-month deletion threshold:** an hourly job deletes occurrence and candidate log rows by their event times, schedule audit rows by action time, and review prompt choices when their `updated_at` time is older than 24 months. When a user checks the review prompt, a choice older than 12 months is refreshed; a “never ask” choice therefore remains for active users and can be forgotten after 24 months of inactivity. The job uses bounded batches, so deletion may occur after the threshold rather than at an exact instant.
-- Occurrence work (including template copies) and dispatch rows have no age-based purge. Expired retry leases and orphaned template, candidate, work and dispatch rows are also removed by maintenance.
+- Execution records of an occurrence (the template copy and dispatch bookkeeping) are deleted about one day after the occurrence is final, and after 24 months in any case; those of an occurrence still in progress are kept until it ends. Expired retry leases and orphaned template, candidate, work and dispatch rows are also removed by maintenance.
 - **Uninstall:** app data stored in Forge hosted storage is kept by Atlassian for 28 days after uninstall and then deleted. Within 21 days of uninstalling, you may ask us to request its recovery for a reinstalled app; we only do so with your consent ([Forge storage reference](https://developer.atlassian.com/platform/forge/storage-reference/)). Jira issues created by the app stay in your Jira site.
 - If the licence is inactive, maintenance pauses and deletes nothing until a later eligible run.
 
