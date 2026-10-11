@@ -1,0 +1,10 @@
+---
+layout: default
+---
+<article>
+  {% if page.draft_banner %}
+  <p class="banner" role="note"><strong>Draft — not yet reviewed by counsel.</strong></p>
+  {% endif %}
+  <h1>{{ page.title }}</h1>
+  {{ content }}
+</article>

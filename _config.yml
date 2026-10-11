@@ -1,0 +1,10 @@
+title: RepeatWise
+description: Recurring issues for Jira Cloud, by Cocoon Care LLC
+# Published from the public repository Mrvivino/repeatwise-docs (see README.md).
+url: https://mrvivino.github.io
+baseurl: /repeatwise-docs
+markdown: kramdown
+exclude:
+  - README.md
+  - Gemfile
+  - vendor
