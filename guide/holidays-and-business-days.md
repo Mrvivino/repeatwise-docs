@@ -15,9 +15,9 @@ Set on the **Rules** step.
 - **Country** (and optional **Region**): public holidays for that place, built into the app. No network call is made. "None" means weekends only.
 - **Extra holidays**: days that are not business days for you (a company closing day).
 - **Removed holidays**: days of the country calendar that you work anyway.
-- Weekends are always Saturday and Sunday, for every country.
+- **Weekend days follow the country**: Saturday and Sunday by default; Friday and Saturday in Algeria, Bahrain, Bangladesh, Egypt, Israel, Libya, Saudi Arabia and Sudan, and in the Malaysian states of Kedah, Kelantan and Terengganu; Friday in Iran; Friday and Sunday in Brunei. The Rules step shows the weekend of the country and region you pick. With no country, the weekend is Saturday and Sunday. In Quick Start, **Every weekday** follows the same working week (Sunday to Thursday in Saudi Arabia), and the weekend moves name the days of that country ("Move to the Thursday before").
 - Only public holidays count. Bank-only, optional, school and observance days do not, and neither does a holiday that starts after midnight (half days). Add any other day yourself as an extra holiday.
-- A removed day that is a Saturday or Sunday is still a weekend day. A date cannot be both extra and removed.
+- A removed day that falls on a weekend day is still a weekend day. A date cannot be both extra and removed.
 - The administrator can set a default country for new schedules.
 - The country picker shows 207 places from the bundled `date-holidays` data. See the [country list](holiday-countries.html). Region choices appear when that country has them.
 

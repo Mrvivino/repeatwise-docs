@@ -15,11 +15,11 @@ A schedule in trouble shows a message in the list and at the top of the editor. 
 1. If creating an issue fails, RepeatWise retries after **5 minutes**, then **15**, then **60**. The schedule stays **Active** with the warning "Attempt n of 4 failed; next attempt at ...".
 2. After 4 failed attempts the occurrence is **Failed** and the schedule goes to **Error** and stops.
 3. Before a retry, RepeatWise searches Jira for an issue it may already have created, so a retry does not make duplicates.
-4. If Jira's answer to a create is lost (Jira unavailable, timeout, network error), the issue may exist even though Jira's search does not show it yet. RepeatWise **never sends that create again**: it only looks for the issue, 5, 10 and 15 minutes later ("not confirmed yet, check 1 of 3"). If it finds it, the run continues as usual. If not, the run fails with "RepeatWise sent the issue at *time* but could not confirm it was created. Check the project before creating it by hand.", the schedule goes to **Error** and the owner is notified. Check the project for the issue around that time, create it by hand only if it is not there, then save the schedule to resume it. Sub-tasks follow the same rule. When Jira clearly refuses a create (for example a required field), the normal retries apply.
+4. If Jira's answer to a create is lost (Jira unavailable, timeout, network error), the issue may exist even though Jira's search does not show it yet. RepeatWise **never sends that create again**: it only looks for the issue, 5, 10 and 15 minutes later ("not confirmed yet, check 1 of 3"). If it finds it, the run continues as usual. If not, the run fails with "RepeatWise sent the issue at *time* but could not confirm it was created. Check the project; if it is not there, use Run now to create it.", the schedule goes to **Error** and the owner is notified. Look for the issue in the project around that time; if it is not there, use **Run now** on the schedule page (or create it by hand), then save the schedule to resume it. Sub-tasks follow the same rule. When Jira clearly refuses a create (for example a required field), the normal retries apply.
 5. If Jira rate-limits (429), the retry waits for the time Jira asks.
 
 ## Catch-up window
-If an issue is due but could not be created (downtime, retries), it is still created late, up to the **catch-up window** (default 24 hours, 0 to 72 in [Administration](admin.html)). Older ones are **skipped** and logged as "Not created in time". Issues created more than 15 minutes late are labelled "Created late" in the log. One late occurrence is caught up per run (every 5 minutes).
+If an issue is due but could not be created (downtime, retries), it is still created late, up to the **catch-up window** (default 24 hours, 0 to 72 in [Administration](admin.html)). Older ones are **skipped** and logged as "Not created in time". An issue whose first attempt failed keeps being retried for at least 3 hours, even with a smaller window; if its retries still cannot run in time (a long outage), the schedule shows an error so you know. Issues created more than 15 minutes late are labelled "Created late" in the log. One late occurrence is caught up per run (every 5 minutes).
 
 ## Inactive license
 
@@ -35,6 +35,8 @@ When the app license is inactive, scheduled creation pauses. Schedules and histo
 | The target project no longer exists, is archived, or the schedule owner cannot see it. | Project gone. | Same. |
 | The issue type of the template no longer exists in the target project. | Issue type removed. | Recreate it or edit the schedule. |
 | Jira rejected the issue, for example because a field is now required. (Jira's own text follows.) | Field rules changed. | Make the field optional or give it a default, then save. |
+| Jira rejected the issue because of: Priority (or another field). A value chosen in the schedule may no longer exist... (Jira's own text follows, in your site's language.) | A value the schedule uses was deleted, renamed or archived in the project, or the field became required. | Edit the schedule, check the fields named, save. |
+| Warning: created without its components (or fix versions): Jira refused them... | A component or version the schedule uses was deleted or archived in the project. The issue was still created, without it. | Edit the schedule and choose the components or versions again. |
 | Atlassian API rate limit reached (HTTP 429). | Too many calls. | Nothing: retried automatically. |
 | Jira is unavailable (HTTP 5xx). | Jira outage. | Nothing: retried automatically. |
 | The previous issue was not found, or the schedule owner cannot see it. | The previous issue was deleted or hidden. Shown as a warning; the new issue is still created. | Restore the owner's access if you want the chaining option to work. |
@@ -50,7 +52,7 @@ When the app license is inactive, scheduled creation pauses. Schedules and histo
 | The previous attempts were interrupted before they finished. | An attempt stopped part way. | Check the issue in Jira, then save the schedule. |
 | Not created: the previous attempts were interrupted before Jira answered. | An attempt stopped before Jira replied. | Check Jira for the issue; save the schedule if needed. |
 | The issue template of this schedule is missing or cannot be read. / The schedule data cannot be read. | Stored data problem. | Edit the schedule and save it again. |
-| RepeatWise sent the issue at (time) but could not confirm it was created. Check the project before creating it by hand. | Jira's answer to the create was lost and the issue was not found after 3 checks. Never sent twice. | Look for the issue in the project; create it by hand only if it is missing, then save the schedule. |
+| RepeatWise sent the issue at (time) but could not confirm it was created. Check the project; if it is not there, use Run now to create it. | Jira's answer to the create was lost and the issue was not found after 3 checks. Never sent twice automatically. | Look for the issue in the project; if it is missing, use **Run now** (or create it by hand), then save the schedule. |
 | RepeatWise sent sub-task n at (time) but could not confirm it was created. Check KEY-123 before creating it by hand. | Same, for a sub-task. The parent and the other sub-tasks are kept. | Check KEY-123's sub-tasks; add the missing one by hand if needed, then save the schedule. |
 | Jira did not return the key of the created issue. / RepeatWise hit an internal error while creating the issue. | Unexpected answer or error. A create without a key is checked like a lost answer. | Retried; save the schedule if it persists. |
 | Unexpected error ... | Anything else. | Retry by saving the schedule; contact support if it persists. |
@@ -81,5 +83,7 @@ When a schedule stops (status **Error**), Jira notifies its owner: the subject i
 
 ## Restarting a stopped schedule
 Fix the cause, then open the schedule and **Save**. It restarts from now. Stopped schedules are also listed on the administration page.
+
+While RepeatWise is still checking whether an issue it sent was created (Jira did not answer clearly, at most about 30 minutes), the schedule cannot be deleted: "RepeatWise is still checking whether the last issue of this schedule was created". Pause it now if needed, and delete it once the check is over. Deleting it earlier would erase what the check needs.
 
 {% endraw %}

@@ -45,7 +45,7 @@ Everything else works as for issues: the run history, retries, catch-up, **Run n
 ## A request is never raised twice
 Jira Service Management cannot tell RepeatWise whether a request was already raised. So when Jira's answer to a create is lost (Jira unavailable, timeout), RepeatWise never sends the request again. Instead it looks for it in the project, a few times over about 30 minutes ("not confirmed yet, check 1 of 3"). If it finds the request, the run continues as usual. A request with the same summary but another request type (for example one raised by hand) is never taken for it. If it does not, the run fails with:
 
-> RepeatWise sent the request at *time* but could not confirm it was created. Check the project before creating it by hand.
+> RepeatWise sent the request at *time* but could not confirm it was created. Check the project; if it is not there, use Run now to create it.
 
 The schedule then shows an error and the owner is notified. Check the service project for a request with that summary around that time; create it by hand only if it is not there, then save the schedule to resume it. **Run now** follows the same rule: the result stays "checking" while RepeatWise looks, then shows the same message.
 

@@ -1,0 +1,4 @@
+﻿Name,Project key,Issue type,Summary,Description,Frequency,Preset,Every,On,Weekend rule,Time,Time zone,Start date,Labels,Assignee,Priority,Holiday country
+Weekly team report,OPS,Task,Weekly report {{date}},Collect the numbers of the week.,every Monday at 9am,,,,,,Europe/Paris,2026-11-02,"report,weekly",owner,Medium,
+Month-end close,FIN,Task,Close the books for {{month}},,,monthly-last-business-day,,,,17:00,Europe/London,2026-11-01,finance,default,,GB
+Server patching,OPS,Task,Patch the servers,,,custom,3 months,15,after,08:00,America/New_York,2026-11-15,,,,

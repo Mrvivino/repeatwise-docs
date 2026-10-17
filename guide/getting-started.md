@@ -11,7 +11,7 @@ source: docs/user/getting-started.md
 {% raw %}
 Create your first recurring issue on one screen.
 
-1. Open **RepeatWise** from the Jira apps menu or a project's sidebar.
+1. Open **RepeatWise** from the Jira sidebar (Apps) or a project's sidebar. Under RepeatWise, **Getting started** shows the first three steps.
 2. Select **New schedule**. If the list is empty, select **Create a schedule**.
 3. Under **What do you want to repeat?**, type a sentence, or select an example under **Try an example**. To skip the sentence, switch the toggle from **Natural language** to **Form**; RepeatWise remembers your choice in this browser.
 4. Check the form card. **Issue** is the issue summary (select the pencil to edit it); the issue type is shown below it, with **Change** to pick another. Choose a **Project**. Under **Repeat**, choose **Every day**, **Every weekday**, **Every week**, **Every 2 weeks**, **Every month**, **Last business day of the month**, **Every quarter**, **Every year**, or **Custom: every X days, weeks, months or years**, then the weekday or day of the month when prompted, and the **Starts** date. Set **Time** and **Time zone** (an IANA time zone).

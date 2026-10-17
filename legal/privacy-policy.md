@@ -38,7 +38,7 @@ Stored in Forge SQL, per Jira site (tables from `src/db/migrations.ts`):
 | Candidate log | Runs skipped or merged (for example holidays, or licence inactive) | No |
 | Retry leases | Technical lock and next-retry time per occurrence | No |
 | Occurrence dispatch | Account id that sent the last issue create, plus retry bookkeeping | Atlassian account id |
-| Schedule audit | Action and time for schedule changes | Actor's Atlassian account id |
+| Schedule audit | Action, time and what changed (in words, never an account id) for schedule changes, Run now and settings changes | Actor's Atlassian account id |
 | Review prompt | A user's choice to defer or stop review reminders, and the time it was last updated | Atlassian account id |
 | Settings | Who may create schedules, default time zone and holiday country, catch-up window and licence state | No |
 
@@ -74,7 +74,7 @@ We do not transfer customer data ourselves. Location of storage and any transfer
 ## 8. Retention and deletion
 
 - Schedules, templates and settings have no age-based purge while the app is installed. Deleting a schedule removes its schedule, template, candidate log, occurrence work and dispatch rows. Its occurrence history and schedule audit remain for the retention purge.
-- **24-month deletion threshold:** an hourly job deletes occurrence and candidate log rows by their event times, schedule audit rows by action time, and review prompt choices when their `updated_at` time is older than 24 months. When a user checks the review prompt, a choice older than 12 months is refreshed; a “never ask” choice therefore remains for active users and can be forgotten after 24 months of inactivity. The job uses bounded batches, so deletion may occur after the threshold rather than at an exact instant.
+- **24-month deletion threshold:** an hourly job deletes occurrence and candidate log rows by their event times, schedule audit rows by action time once their schedule is deleted (the audit of an existing schedule is kept while it exists; settings changes are deleted after 24 months), and review prompt choices when their `updated_at` time is older than 24 months. When a user checks the review prompt, a choice older than 12 months is refreshed; a “never ask” choice therefore remains for active users and can be forgotten after 24 months of inactivity. The job uses bounded batches, so deletion may occur after the threshold rather than at an exact instant.
 - Execution records of an occurrence (the template copy and dispatch bookkeeping) are deleted about one day after the occurrence is final, and after 24 months in any case; those of an occurrence still in progress are kept until it ends. Expired retry leases and orphaned template, candidate, work and dispatch rows are also removed by maintenance.
 - **Uninstall:** app data stored in Forge hosted storage is kept by Atlassian for 28 days after uninstall and then deleted. Within 21 days of uninstalling, you may ask us to request its recovery for a reinstalled app; we only do so with your consent ([Forge storage reference](https://developer.atlassian.com/platform/forge/storage-reference/)). Jira issues created by the app stay in your Jira site.
 - If the licence is inactive, maintenance pauses and deletes nothing until a later eligible run.
@@ -82,7 +82,7 @@ We do not transfer customer data ourselves. Location of storage and any transfer
 ## 9. Security
 
 - No external egress, so data is not sent outside the Atlassian platform.
-- Requests to Jira use the minimum Forge scopes: `read:jira-work`, `write:jira-work` (with impersonation of the schedule owner), `read:sprint:jira-software`, `write:sprint:jira-software`, `read:board-scope:jira-software`, `read:project:jira`, `read:jira-user`, and `read:servicedesk-request`, `write:servicedesk-request` (Jira Service Management service requests).
+- Requests to Jira use the minimum Forge scopes: `read:jira-work`, `write:jira-work` (with impersonation of the schedule owner), `read:sprint:jira-software`, `write:sprint:jira-software`, `read:board-scope:jira-software`, `read:project:jira`, `read:jira-user`, `read:servicedesk-request`, `write:servicedesk-request` (Jira Service Management service requests), and `report:personal-data` (the personal data report to Atlassian described in section 10).
 - Transport encryption, encryption at rest, backups and hosting security are provided by Atlassian's Forge platform ([Atlassian Trust Center](https://www.atlassian.com/trust)).
 - No secrets are stored in the app code.
 
@@ -90,7 +90,7 @@ No system is perfectly secure. If we become aware of a security incident affecti
 
 ## 10. Your rights
 
-Depending on where you are, you may have rights of access, correction, deletion, restriction, portability and objection. Because your organization is the controller, please contact your Jira site administrator first; we will help them answer. You can also write to us at the address in section 1. You may lodge a complaint with your data protection authority. We answer requests within 30 days.
+Depending on where you are, you may have rights of access, correction, deletion, restriction, portability and objection. Because your organization is the controller, please contact your Jira site administrator first; we will help them answer. You can also write to us at the address in section 1. You may lodge a complaint with your data protection authority. We answer requests within 30 days. RepeatWise also follows Atlassian's personal data reporting for apps: every 7 days it reports the Atlassian account ids it stores to Atlassian. When Atlassian says an account was closed, RepeatWise erases or anonymises the references to it: assignments go to the project default, user field values and mentions are removed, schedules owned by that account stop until an administrator gives them a new owner, and audit entries keep an anonymous actor. Records of an issue creation still in progress are kept until it ends, then deleted by maintenance within about a day.
 
 ## 11. Third-party notices
 
