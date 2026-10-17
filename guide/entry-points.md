@@ -11,7 +11,7 @@ source: docs/user/entry-points.md
 {% raw %}
 | Where | What | Status |
 |---|---|---|
-| Global page (Jira sidebar, Apps, "RepeatWise") | Your schedules across the projects you can browse. Select **RepeatWise** to show its pages: **Schedules**, **Calendar**, **Find recurring work**, **Compliance report**, **Import & export**, **Getting started** | Available |
+| Global page (Jira sidebar, Apps, "RepeatWise") | Your schedules across the projects you can browse. Select **RepeatWise** to show its pages: **Schedules**, **Calendar**, **Find recurring work**, **Compliance report**, **Import & export**, **Preferences**, **Getting started** | Available |
 | Project page (project sidebar, "RepeatWise") | Schedules of that project; new schedules start on that project | Available |
 | Administration (Jira settings, Apps, "RepeatWise") | **Overview** (summary tiles, schedules in error), **Settings**, **Occurrence log**; a **Get started** button in Manage apps. Jira administrators only | Available |
 | Issue action "Make this issue recurring" | Open Quick Start filled from the issue; **More options** opens the wizard | Available |
@@ -49,5 +49,8 @@ Past days show what happened, with the status (Created, Skipped, Failed or Pendi
 ## Finding generated issues
 Each created issue carries a property `recurrence` with `scheduleId`, `occurrence` and `plannedAt`. In JQL:
 `issue.property[recurrence].scheduleId = "<schedule id>"`.
+
+## Preferences
+Under RepeatWise in the Jira sidebar, **Preferences** sets how RepeatWise looks for you: a **12-hour or 24-hour clock**, **weeks starting on Monday or Sunday** in the calendar, the **time zone** and **project** proposed when you create a schedule, whether the schedule list opens on **every schedule** or **only yours**, and the calendar's first view (**Month**, **Week** or **Agenda**). They are saved in this browser for your Jira account: another browser keeps its own, and nothing is sent anywhere. Exported files keep the 24-hour clock. Site-wide defaults (who can create schedules, default time zone and holiday country, catch-up window) are set by Jira administrators in the administration.
 
 {% endraw %}
